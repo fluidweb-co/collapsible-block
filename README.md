@@ -190,11 +190,9 @@ Starting as `expanded`;
 
 ### 4. Targetting a collapsbile block outside of the structure
 
-The collapsible block below does not follow the recommended HTML structure but it is still possible to control it's state with a handler element that is not connected to the collapsible content section by the HTML structure. For that it is necessary that the `id` attribute of the content element is set manually (or at least known).
-
 It is possible to control the state of a collapsible block even when it does not follow the recommented HTML structure.
 
-For that you'll need to know the ID of the collapsible content element and set the data attribute `data-collapsible-target="<KNOWN_COLLAPSIBLE_CONTENT_ID>"` replacing `<KNOWN_COLLAPSIBLE_CONTENT_ID>` with the actual id of the content element. The handler element will have a markup similar to this:
+For that you'll need to know the ID of the collapsible content element and set the data attribute `data-collapsible-target="<KNOWN_COLLAPSIBLE_CONTENT_ID>"` replacing `<KNOWN_COLLAPSIBLE_CONTENT_ID>` with the actual ID of the content element. The handler element will have a markup similar to this:
 
 ```html
 <a href="#" data-collapsible-handler data-collapsible-target="collapsible-content-disconnected"></a>
