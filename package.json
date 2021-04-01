@@ -1,0 +1,42 @@
+{
+  "name": "collapsible-block",
+  "version": "1.0.0",
+  "description": "Lightweight Collapse/Expand component library.",
+  "keywords": [
+    "slider",
+    "slider-component",
+    "slider-image",
+    "slider-element",
+    "slider-control"
+  ],
+  "main": "dist/collapsible-block.min.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fluidweb-co/collapsible-block.git"
+  },
+  "author": "Fluidweb.co",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fluidweb-co/collapsible-block/issues"
+  },
+  "homepage": "https://github.com/fluidweb-co/collapsible-block",
+  "devDependencies": {
+    "del": "^5.1.0",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^7.0.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-cssnano": "^2.1.1",
+    "gulp-plumber": "^1.2.1",
+    "gulp-rename": "^2.0.0",
+    "gulp-replace": "^1.0.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-uglify": "^3.0.2"
+  },
+  "dependencies": {
+    "hammerjs": "^2.0.8"
+  }
+}

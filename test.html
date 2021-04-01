@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Collapsible Block Test</title>
+	
+	<!-- <link rel='stylesheet' id='collapsible-block' href='dist/collapsible-block.min.css' type='text/css' media='all' /> -->
+	<script type="text/javascript" src="dist/collapsible-block.min.js"></script>
+	
+	<script type="text/javascript">
+		var log = function( message ) {
+			var debugContainer = document.querySelector( '.debug-container' );
+			if ( debugContainer ) {
+				var newMessage = document.createElement( 'p' );
+				newMessage.innerText = message;
+				debugContainer.appendChild( newMessage );
+			}
+		}
+
+		var initCollapsibleBlocks = function() {
+			if ( window.CollapsibleBlock ) {
+				CollapsibleBlock.init();
+				log( 'Collapsible Blocks initialized.' );
+			}
+			else {
+				log( 'Collapsible Blocks isn\'t loaded.' );
+			}
+		}
+
+		window.addEventListener( "DOMContentLoaded", function () { log( 'DOM Content loaded' ); } );
+		window.addEventListener( "DOMContentLoaded", function () { initCollapsibleBlocks(); } );
+		window.addEventListener( "load", function () { log( 'Page loaded' ); } );
+	
+	</script>
+
+	<style type="text/css">
+		* {
+			box-sizing: border-box;
+		}
+
+		hr {
+			margin-top: 30px;
+			margin-bottom: 30px;
+		}
+
+		.collapsible-block__handler {
+			display: inline-block;
+			margin-top: 10px;
+			padding: 5px 10px;
+			background-color: #f9f9f9;
+		}
+
+		.disconnected-handler .collapsible-block__handler {
+			background-color: #f7bdbd;
+		}
+
+		.collapsible-content__inner {
+			margin-top: 20px;
+			margin-bottom: 30px;
+			padding: 20px;
+			background-color: #f3f3f3;
+			border: solid 2px #ddd;
+		}
+
+		.collapsible-content strong {
+			display: block;
+			margin-bottom: 10px;
+		}
+	</style>
+
+</head>
+<body>
+
+	<hr/>
+
+	<h2>One collapsible block -- Initially collapsed</h2>
+	
+	<div class="collapsible-blocks__group">
+		<div data-collapsible>
+			<a href="#" class="collapsible-block__handler" data-collapsible-handler>
+				Toggle State
+			</a>
+			<div class="collapsible-content" data-collapsible-content data-collapsible-initial-state="collapsed">
+				<div class="collapsible-content__inner">
+					<strong>Collapsible Content</strong><br>
+					Cupcake ipsum dolor sit amet brownie. Tootsie roll lollipop chocolate cake soufflé sweet roll gingerbread gummi bears dragée. Tootsie roll soufflé lemon drops. Cheesecake dragée jujubes cake jelly cookie caramels marzipan ice cream. Pastry jelly candy pastry halvah. Brownie tiramisu halvah. Pie gummi bears topping marzipan gummi bears jelly-o bonbon jelly-o jujubes. Croissant pudding liquorice lollipop jelly-o sweet chocolate cake caramels marzipan. Chocolate halvah marzipan wafer dessert toffee pastry croissant. Dragée ice cream lemon drops chocolate cake toffee fruitcake caramels sesame snaps carrot cake. Powder powder marzipan muffin cake danish pie. Lemon drops sesame snaps chocolate muffin apple pie fruitcake chocolate cake marzipan topping. Jelly beans brownie cake jelly beans tiramisu lemon drops chocolate carrot cake sugar plum.
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<hr/>
+
+	<h2>One collapsible block -- Initially expanded</h2>
+	
+	<div class="collapsible-blocks__group">
+		<div data-collapsible>
+			<a href="#" class="collapsible-block__handler" data-collapsible-handler>
+				Toggle State
+			</a>
+			<div class="collapsible-content" data-collapsible-content data-collapsible-initial-state="expanded">
+				<div class="collapsible-content__inner">
+					<strong>Collapsible Content</strong><br>
+					Cupcake ipsum dolor sit amet brownie. Tootsie roll lollipop chocolate cake soufflé sweet roll gingerbread gummi bears dragée. Tootsie roll soufflé lemon drops. Cheesecake dragée jujubes cake jelly cookie caramels marzipan ice cream. Pastry jelly candy pastry halvah. Brownie tiramisu halvah. Pie gummi bears topping marzipan gummi bears jelly-o bonbon jelly-o jujubes. Croissant pudding liquorice lollipop jelly-o sweet chocolate cake caramels marzipan. Chocolate halvah marzipan wafer dessert toffee pastry croissant. Dragée ice cream lemon drops chocolate cake toffee fruitcake caramels sesame snaps carrot cake. Powder powder marzipan muffin cake danish pie. Lemon drops sesame snaps chocolate muffin apple pie fruitcake chocolate cake marzipan topping. Jelly beans brownie cake jelly beans tiramisu lemon drops chocolate carrot cake sugar plum.
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<hr/>
+
+	<h2>Multi collapsible block -- First expanded</h2>
+	
+	<div class="collapsible-blocks__group">
+		<div data-collapsible>
+			<a href="#" class="collapsible-block__handler" data-collapsible-handler>
+				Toggle State 1
+			</a>
+			<div class="collapsible-content" data-collapsible-content>
+				<div class="collapsible-content__inner">
+					<strong>Collapsible Content</strong><br>
+					Cupcake ipsum dolor sit amet brownie. Tootsie roll lollipop chocolate cake soufflé sweet roll gingerbread gummi bears dragée. Tootsie roll soufflé lemon drops. Cheesecake dragée jujubes cake jelly cookie caramels marzipan ice cream. Pastry jelly candy pastry halvah. Brownie tiramisu halvah. Pie gummi bears topping marzipan gummi bears jelly-o bonbon jelly-o jujubes. Croissant pudding liquorice lollipop jelly-o sweet chocolate cake caramels marzipan. Chocolate halvah marzipan wafer dessert toffee pastry croissant. Dragée ice cream lemon drops chocolate cake toffee fruitcake caramels sesame snaps carrot cake. Powder powder marzipan muffin cake danish pie. Lemon drops sesame snaps chocolate muffin apple pie fruitcake chocolate cake marzipan topping. Jelly beans brownie cake jelly beans tiramisu lemon drops chocolate carrot cake sugar plum.
+				</div>
+			</div>
+		</div>
+
+		<div data-collapsible>
+			<a href="#" class="collapsible-block__handler" data-collapsible-handler>
+				Toggle State 2
+			</a>
+			<div class="collapsible-content" data-collapsible-content>
+				<div class="collapsible-content__inner">
+					<strong>Collapsible Content</strong><br>
+					Cupcake ipsum dolor sit amet brownie. Tootsie roll lollipop chocolate cake soufflé sweet roll gingerbread gummi bears dragée. Tootsie roll soufflé lemon drops. Cheesecake dragée jujubes cake jelly cookie caramels marzipan ice cream. Pastry jelly candy pastry halvah. Brownie tiramisu halvah. Pie gummi bears topping marzipan gummi bears jelly-o bonbon jelly-o jujubes. Croissant pudding liquorice lollipop jelly-o sweet chocolate cake caramels marzipan. Chocolate halvah marzipan wafer dessert toffee pastry croissant. Dragée ice cream lemon drops chocolate cake toffee fruitcake caramels sesame snaps carrot cake. Powder powder marzipan muffin cake danish pie. Lemon drops sesame snaps chocolate muffin apple pie fruitcake chocolate cake marzipan topping. Jelly beans brownie cake jelly beans tiramisu lemon drops chocolate carrot cake sugar plum.
+				</div>
+			</div>
+		</div>
+
+		<div data-collapsible>
+			<a href="#" class="collapsible-block__handler" data-collapsible-handler>
+				Toggle State 3
+			</a>
+			<div class="collapsible-content" data-collapsible-content>
+				<div class="collapsible-content__inner">
+					<strong>Collapsible Content</strong><br>
+					Cupcake ipsum dolor sit amet brownie. Tootsie roll lollipop chocolate cake soufflé sweet roll gingerbread gummi bears dragée. Tootsie roll soufflé lemon drops. Cheesecake dragée jujubes cake jelly cookie caramels marzipan ice cream. Pastry jelly candy pastry halvah. Brownie tiramisu halvah. Pie gummi bears topping marzipan gummi bears jelly-o bonbon jelly-o jujubes. Croissant pudding liquorice lollipop jelly-o sweet chocolate cake caramels marzipan. Chocolate halvah marzipan wafer dessert toffee pastry croissant. Dragée ice cream lemon drops chocolate cake toffee fruitcake caramels sesame snaps carrot cake. Powder powder marzipan muffin cake danish pie. Lemon drops sesame snaps chocolate muffin apple pie fruitcake chocolate cake marzipan topping. Jelly beans brownie cake jelly beans tiramisu lemon drops chocolate carrot cake sugar plum.
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<hr/>
+
+	<h2>Targetting a disconnected collapsible block content element</h2>
+	<div>The collapsible block below does not follow the recommended HTML structure but it is still possible to control it's state with a handler element that is not connected to the collapsible content section by the HTML structure. For that it is necessary that the `id` attribute of the content element is set manually (or at least known).</div>
+
+	<div class="collapsible-blocks__group">
+		<div class="disconnected-handler">
+			<a href="#" class="collapsible-block__handler" data-collapsible-handler data-collapsible-target="collapsible-content-disconnected">
+				Toggle State
+			</a>
+		</div>
+
+		<div id="collapsible-content-disconnected" class="collapsible-content" data-collapsible data-collapsible-content>
+			<div class="collapsible-content__inner">
+				<strong>#collapsible-content-disconnected</strong><br>
+				Cupcake ipsum dolor sit amet brownie. Tootsie roll lollipop chocolate cake soufflé sweet roll gingerbread gummi bears dragée. Tootsie roll soufflé lemon drops. Cheesecake dragée jujubes cake jelly cookie caramels marzipan ice cream. Pastry jelly candy pastry halvah. Brownie tiramisu halvah. Pie gummi bears topping marzipan gummi bears jelly-o bonbon jelly-o jujubes. Croissant pudding liquorice lollipop jelly-o sweet chocolate cake caramels marzipan. Chocolate halvah marzipan wafer dessert toffee pastry croissant. Dragée ice cream lemon drops chocolate cake toffee fruitcake caramels sesame snaps carrot cake. Powder powder marzipan muffin cake danish pie. Lemon drops sesame snaps chocolate muffin apple pie fruitcake chocolate cake marzipan topping. Jelly beans brownie cake jelly beans tiramisu lemon drops chocolate carrot cake sugar plum.
+			</div>
+		</div>
+	</div>
+
+	<div class="debug-container">
+	</div>
+
+</body>
+</html>
