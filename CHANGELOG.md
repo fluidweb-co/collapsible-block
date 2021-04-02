@@ -14,6 +14,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Fixed some typos and removed an unnecessary paragraph from README.md
 
+### Removed
+
+- Removed unnecessary dependency `hammerjs`
+
 ## [1.0.0] - 2021-04-01
 
 ### Added

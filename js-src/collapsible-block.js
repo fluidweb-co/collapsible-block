@@ -279,7 +279,6 @@
 		}
 
 		// Set initial state at element initialization
-		// TODO: Maybe get initial state from main collapsible element
 		var initialStateAttribute = manager.contentElement.getAttribute( manager.settings.initialStateAttribute );
 		var initialState = initialStateAttribute ? initialStateAttribute : manager.settings.initialState;
 		var index = Array.prototype.indexOf.call( manager.element.parentNode.children, manager.element );
