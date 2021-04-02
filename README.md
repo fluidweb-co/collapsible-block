@@ -55,7 +55,7 @@ These are the currently accepted options with their default values, if in doubt 
 		createHandlerAttribute: 'data-collapsible-create-handler',
 		changeStateOnResizeAttribute: 'data-collapsible-change-state-resize',
 
-		initialState: 'first-expanded', // Accepts `first-expanded`, `collapsed` and `expanded`
+		initialState: CollapsibleBlock.states.FIRST_EXPANDED, // @see `CollapsibleBlock.states` for accepted values
 		initialStateAttribute: 'data-collapsible-initial-state',
 
 		idPrefix: 'collapsible',
@@ -86,6 +86,31 @@ CollapsibleBlock.init( options );
 ```
 
 Everything else will use the default values.
+
+
+## `CollapsibleBlock.states` values accepted
+
+When using referencing to the state of a collapsible block you can use the values exposed as `CollapsibleBlock.states` in JS, or the state's correpondent string values.
+
+- `CollapsibleBlock.states.COLLAPSED`, string value `collapsed`: Represents the state of a collapsible block with it's content hidden.
+- `CollapsibleBlock.states.EXPANDED`, string value `expanded`: Represents the state of a collapsible block with it's content visible.
+- `CollapsibleBlock.states.FIRST_EXPANDED`, string value `first_expanded`: Represents the initial state of a group of collapsible blocks where the first collapsible block in the group will start in the "EXPANDED" state and all the other blocks in the same group will start as "COLLAPSED".
+
+To set the initial state of the collapsible block individually using data attributes you will have use the correspondent string values because the JS variable will not be parsed or evaluated on html data attributes.
+
+So use this (right way):
+
+```html
+<div class="collapsible-content" data-collapsible-content data-collapsible-initial-state="collapsed"></div>
+```
+
+Instead of this (this won't work):
+
+```html
+<div class="collapsible-content" data-collapsible-content data-collapsible-initial-state="CollapsibleBlock.states.COLLAPSED"></div>
+```
+
+See the section "Basic Usage > Using `data` attributes to change the initial state" below.
 
 
 
@@ -120,10 +145,10 @@ You can define one collapsible block element to start as `collapsed` or `expande
 Starting as `collapsed`;
 ```html
 <div data-collapsible>
-	<a href="#" data-collapsible-handler data-collapsible-initial-state="collapsed">
+	<a href="#" data-collapsible-handler>
 		Toggle State
 	</a>
-	<div class="collapsible-content" data-collapsible-content>
+	<div class="collapsible-content" data-collapsible-content data-collapsible-initial-state="collapsed">
 		<div class="collapsible-content__inner">
 			This content will start collapsed
 		</div>
@@ -134,10 +159,10 @@ Starting as `collapsed`;
 Starting as `expanded`;
 ```html
 <div data-collapsible>
-	<a href="#" data-collapsible-handler data-collapsible-initial-state="expanded">
+	<a href="#" data-collapsible-handler>
 		Toggle State
 	</a>
-	<div class="collapsible-content" data-collapsible-content>
+	<div class="collapsible-content" data-collapsible-content data-collapsible-initial-state="expanded">
 		<div class="collapsible-content__inner">
 			This content will start expanded
 		</div>

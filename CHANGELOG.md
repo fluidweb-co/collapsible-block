@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 
+- Exposed the variable `_states` for public use as `CollapsibleBlock.states`
 - Added CHANGELOG.md (this file)
 
 ### Fixed
