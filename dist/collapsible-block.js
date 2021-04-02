@@ -19,12 +19,12 @@
 	var _hasInitialized = false;
 	var _publicMethods = {
 		managers: [],
+		states: {
+			COLLAPSED: 'collapsed',
+			FIRST_EXPANDED: 'first-expanded',
+			EXPANDED: 'expanded',
+		},
 	};
-	var _states = {
-		COLLAPSED: 'collapsed',
-		FIRST_EXPANDED: 'first-expanded',
-		EXPANDED: 'expanded',
-	}
 	var _settings = { };
 	var _defaults = {
         elementSelector: '[data-collapsible]',
@@ -39,7 +39,7 @@
 		createHandlerAttribute: 'data-collapsible-create-handler',
 		changeStateOnResizeAttribute: 'data-collapsible-change-state-resize',
 
-		initialState: _states.FIRST_EXPANDED,
+		initialState: _publicMethods.states.FIRST_EXPANDED,
 		initialStateAttribute: 'data-collapsible-initial-state',
         
         idPrefix: 'collapsible',
@@ -229,9 +229,9 @@
         if ( ! manager ) { return false; }
 		
 		// Get current state
-		var currentState = _states.EXPANDED;
+		var currentState = _publicMethods.states.EXPANDED;
 		if ( element.classList.contains( manager.settings.isCollapsedClass ) ) {
-			currentState = _states.COLLAPSED;
+			currentState = _publicMethods.states.COLLAPSED;
 		}
 
 		return currentState;
@@ -282,7 +282,7 @@
 		var initialStateAttribute = manager.contentElement.getAttribute( manager.settings.initialStateAttribute );
 		var initialState = initialStateAttribute ? initialStateAttribute : manager.settings.initialState;
 		var index = Array.prototype.indexOf.call( manager.element.parentNode.children, manager.element );
-		if ( initialState == _states.EXPANDED || ( initialState == _states.FIRST_EXPANDED && index == 0 ) ) {
+		if ( initialState == _publicMethods.states.EXPANDED || ( initialState == _publicMethods.states.FIRST_EXPANDED && index == 0 ) ) {
 			_publicMethods.expand( manager.element );
 		}
 		else {
