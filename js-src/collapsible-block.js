@@ -33,7 +33,7 @@
         
         isCollapsedClass: 'is-collapsed',
         isActivatedClass: 'is-activated',
-		cssTransition: 'height .1s linear',
+		cssTransition: 'height .15s linear',
         
         targetAttribute: 'data-collapsible-target',
         maxHeightAttribute: 'data-collapsible-max-height',
@@ -200,6 +200,21 @@
 
 
 	/**
+	 * Remove the height property value from the `contentElement` when height transition ends.
+	 */
+	var removeHeight = function ( e ) {
+		if ( e.propertyName !== 'height' ) return;
+
+		// Remove element height when transition is complete
+		e.target.style.height = '';
+
+		// Remove the event handler so it runs only once
+		e.target.removeEventListener( getTransitionEvent(), removeHeight );
+	}
+
+
+
+	/**
 	 * Collapse element
 	 */
 	_publicMethods.collapse = function( element ) {
@@ -210,10 +225,9 @@
 
         // Collapse element
 		manager.element.classList.add( manager.settings.isCollapsedClass );
-		
-		// Temporarily remove the element's transition
-		var elementTransition = manager.contentElement.style.transition;
-		manager.contentElement.style.transition = '';
+
+		// Remove `removeHeight` event listener to prevent block from expanding
+		manager.contentElement.removeEventListener( getTransitionEvent(), removeHeight );
 		
 		requestAnimationFrame( function() {
 			// Set height of the content element to it's current expanded height
@@ -221,11 +235,7 @@
 			
 			// Wait for the new height to apply
 			requestAnimationFrame( function() {
-				
-				// Restore the elements
-				manager.contentElement.style.transition = elementTransition;
-				
-				// Set height of the element to
+				// Set height of the element to the collapsed state
 				manager.contentElement.style.height = manager.settings.maxHeight + 'px';
 			});
 		} )
@@ -242,20 +252,14 @@
         // Bail if manager not found
         if ( ! manager ) { return; }
 
-        // Expand element
-        manager.element.classList.remove( manager.settings.isCollapsedClass );
+		// Set event handler to remove height value when transition ends
+		manager.contentElement.addEventListener( getTransitionEvent(), removeHeight );
+
 		requestAnimationFrame( function() {
-			// Set event handler
-			manager.contentElement.addEventListener( getTransitionEvent(), function finish( e ) {
-				// Remove element height when transition is complete
-				manager.contentElement.style.height = '';
-
-				// Remove the event handler so it runs only once
-				e.target.removeEventListener( getTransitionEvent(), finish );
-			} );
-
+			// Expand element to its content height
+			manager.element.classList.remove( manager.settings.isCollapsedClass );
 			manager.contentElement.style.height = manager.contentElement.scrollHeight + 'px';
-		});
+		} );
     }
 
 
@@ -328,10 +332,6 @@
 		// Set overflow css property to hide content when the block is collapsed
 		manager.contentElement.style.overflow = 'hidden';
 
-		// Set transition css property
-		var cssTransition = manager.contentElement.style.transition != '' ? manager.contentElement.style.transition + ', ' + manager.settings.cssTransition : manager.settings.cssTransition;
-		manager.contentElement.style.transition = cssTransition;
-        
         // Get maxHeight from attributes
 		var maxHeightAttribute = manager.contentElement.getAttribute( manager.settings.maxHeightAttribute );
         manager.settings.maxHeight = maxHeightAttribute && maxHeightAttribute != '' ? parseInt( maxHeightAttribute ) : manager.settings.maxHeight;
@@ -361,6 +361,11 @@
 			maybeChangeStateOnResize( manager );
 			window.addEventListener( 'resize', function() { maybeChangeStateOnResize( manager ); } );
 		}
+		
+		// Set css transition property
+		var computedTransition = window.getComputedStyle( manager.contentElement ).transition;
+		var cssTransition = computedTransition != '' ? computedTransition + ', ' + manager.settings.cssTransition : manager.settings.cssTransition;
+		manager.contentElement.style.transition = cssTransition;
 		
 		// Set element as activated
 		manager.isActivated = true;
