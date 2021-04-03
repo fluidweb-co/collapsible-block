@@ -33,6 +33,7 @@
         
         isCollapsedClass: 'is-collapsed',
         isActivatedClass: 'is-activated',
+		cssTransition: 'height .15s linear',
         
         targetAttribute: 'data-collapsible-target',
         maxHeightAttribute: 'data-collapsible-max-height',
@@ -91,6 +92,37 @@
 
 		return extended;
     };
+
+
+
+	/**
+	 * Provide a crossbrowser way to determine which
+	 * transitionend event is supported by the current browser.
+	 * 
+	 * Based on the work of:
+	 * Jonathan Suh - https://jonsuh.com/blog/detect-the-end-of-css-animations-and-transitions-with-javascript/
+	 * David Walsh - https://davidwalsh.name/css-animation-callback
+	 *
+	 * @return  {String}  The transitionend event name
+	 */
+	 var getTransitionEvent = function() {
+        var t;
+		var el = document.createElement('fakeelement');
+		var transitions = {
+			'transition':'transitionend',
+			'OTransition':'oTransitionEnd',
+			'MozTransition':'transitionend',
+			'WebkitTransition':'webkitTransitionEnd'
+		}
+
+		for( t in transitions ){
+			if( el.style[t] !== undefined ){
+				return transitions[t];
+			}
+		}
+
+		return 'animationend';
+	};
 
 
 
@@ -168,6 +200,21 @@
 
 
 	/**
+	 * Remove the height property value from the `contentElement` when height transition ends.
+	 */
+	var removeHeight = function ( e ) {
+		if ( e.propertyName !== 'height' ) return;
+
+		// Remove element height when transition is complete
+		e.target.style.height = '';
+
+		// Remove the event handler so it runs only once
+		e.target.removeEventListener( getTransitionEvent(), removeHeight );
+	}
+
+
+
+	/**
 	 * Collapse element
 	 */
 	_publicMethods.collapse = function( element ) {
@@ -177,8 +224,21 @@
 		if ( ! manager ) { return; }
 
         // Collapse element
-		element.classList.add( manager.settings.isCollapsedClass );
-        manager.contentElement.style.height = manager.settings.maxHeight + 'px';
+		manager.element.classList.add( manager.settings.isCollapsedClass );
+
+		// Remove `removeHeight` event listener to prevent block from expanding
+		manager.contentElement.removeEventListener( getTransitionEvent(), removeHeight );
+		
+		requestAnimationFrame( function() {
+			// Set height of the content element to it's current expanded height
+			manager.contentElement.style.height = manager.contentElement.scrollHeight + 'px';
+			
+			// Wait for the new height to apply
+			requestAnimationFrame( function() {
+				// Set height of the element to the collapsed state
+				manager.contentElement.style.height = manager.settings.maxHeight + 'px';
+			});
+		} )
     }
 
 
@@ -192,9 +252,14 @@
         // Bail if manager not found
         if ( ! manager ) { return; }
 
-        // Expand element
-        element.classList.remove( manager.settings.isCollapsedClass );
-        manager.contentElement.style.height = '';
+		// Set event handler to remove height value when transition ends
+		manager.contentElement.addEventListener( getTransitionEvent(), removeHeight );
+
+		requestAnimationFrame( function() {
+			// Expand element to its content height
+			manager.element.classList.remove( manager.settings.isCollapsedClass );
+			manager.contentElement.style.height = manager.contentElement.scrollHeight + 'px';
+		} );
     }
 
 
@@ -266,7 +331,7 @@
 
 		// Set overflow css property to hide content when the block is collapsed
 		manager.contentElement.style.overflow = 'hidden';
-        
+
         // Get maxHeight from attributes
 		var maxHeightAttribute = manager.contentElement.getAttribute( manager.settings.maxHeightAttribute );
         manager.settings.maxHeight = maxHeightAttribute && maxHeightAttribute != '' ? parseInt( maxHeightAttribute ) : manager.settings.maxHeight;
@@ -296,6 +361,11 @@
 			maybeChangeStateOnResize( manager );
 			window.addEventListener( 'resize', function() { maybeChangeStateOnResize( manager ); } );
 		}
+		
+		// Set css transition property
+		var computedTransition = window.getComputedStyle( manager.contentElement ).transition;
+		var cssTransition = computedTransition != '' ? computedTransition + ', ' + manager.settings.cssTransition : manager.settings.cssTransition;
+		manager.contentElement.style.transition = cssTransition;
 		
 		// Set element as activated
 		manager.isActivated = true;

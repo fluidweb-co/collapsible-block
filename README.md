@@ -57,6 +57,7 @@ These are the currently accepted options with their default values, if in doubt 
 
 		initialState: CollapsibleBlock.states.FIRST_EXPANDED, // @see `CollapsibleBlock.states` for accepted values
 		initialStateAttribute: 'data-collapsible-initial-state',
+		cssTransition: 'height .15s linear',
 
 		idPrefix: 'collapsible',
 		createHandler: false,
