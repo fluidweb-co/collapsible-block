@@ -27,26 +27,26 @@
 	};
 	var _settings = { };
 	var _defaults = {
-        elementSelector: '[data-collapsible]',
-        contentElementSelector: '[data-collapsible-content]',
-        handlerSelector: '[data-collapsible-handler]',
-        
-        isCollapsedClass: 'is-collapsed',
-        isActivatedClass: 'is-activated',
+		elementSelector: '[data-collapsible]',
+		contentElementSelector: '[data-collapsible-content]',
+		handlerSelector: '[data-collapsible-handler]',
+		
+		isCollapsedClass: 'is-collapsed',
+		isActivatedClass: 'is-activated',
 		cssTransition: 'height .15s linear',
-        
-        targetAttribute: 'data-collapsible-target',
-        maxHeightAttribute: 'data-collapsible-max-height',
+		
+		targetAttribute: 'data-collapsible-target',
+		maxHeightAttribute: 'data-collapsible-max-height',
 		createHandlerAttribute: 'data-collapsible-create-handler',
 		changeStateOnResizeAttribute: 'data-collapsible-change-state-resize',
 
 		initialState: _publicMethods.states.FIRST_EXPANDED,
 		initialStateAttribute: 'data-collapsible-initial-state',
-        
-        idPrefix: 'collapsible',
-        createHandler: false,
-        maxHeight: 0,
-        handlerTemplate: '<a href="#collapsible" role="button" data-collapsible-handler>Read more</a>',
+		
+		idPrefix: 'collapsible',
+		createHandler: false,
+		maxHeight: 0,
+		handlerTemplate: '<a href="#collapsible" role="button" data-collapsible-handler>Read more</a>',
 	};
 
 
@@ -91,7 +91,7 @@
 		}
 
 		return extended;
-    };
+	};
 
 
 
@@ -106,7 +106,7 @@
 	 * @return  {String}  The transitionend event name
 	 */
 	 var getTransitionEvent = function() {
-        var t;
+		var t;
 		var el = document.createElement('fakeelement');
 		var transitions = {
 			'transition':'transitionend',
@@ -130,8 +130,8 @@
 	 * Route click events
 	 */
 	var handleClick = function( e ) {
-        if ( e.target.closest( _settings.handlerSelector ) ) {
-            e.preventDefault();
+		if ( e.target.closest( _settings.handlerSelector ) ) {
+			e.preventDefault();
 			
 			var handlerElement = e.target.closest( _settings.handlerSelector );
 			var targetElement = document.querySelector( '#' + handlerElement.getAttribute( _settings.targetAttribute ) );
@@ -140,37 +140,37 @@
 			}
 			var element = targetElement.closest( _settings.elementSelector );
 
-            if ( element ) {
-                _publicMethods.toggleState( element );
-            }
-        }
-    }
+			if ( element ) {
+				_publicMethods.toggleState( element );
+			}
+		}
+	}
 
 
 
-    /**
+	/**
 	 * Create handler element
 	 */
 	var createHandlerElement = function( manager ) {
-        var element = manager.element;
-        var contentElement = manager.contentElement;
+		var element = manager.element;
+		var contentElement = manager.contentElement;
 		var handler = document.createElement('div');
 		handler.innerHTML = manager.settings.handlerTemplate.trim();
-        manager.handlerElement = handler.childNodes[0];
-        manager.handlerElement.setAttribute( manager.settings.targetAttribute, contentElement.id );
-        manager.handlerElement.setAttribute( 'href', '#' );
-        manager.handlerElement.setAttribute( 'role', 'button' );
+		manager.handlerElement = handler.childNodes[0];
+		manager.handlerElement.setAttribute( manager.settings.targetAttribute, contentElement.id );
+		manager.handlerElement.setAttribute( 'href', '#' );
+		manager.handlerElement.setAttribute( 'role', 'button' );
 
-        element.insertBefore( handler.childNodes[0], contentElement.nextSibling );
-    }
-    
+		element.insertBefore( handler.childNodes[0], contentElement.nextSibling );
+	}
+	
 
 
-    /**
+	/**
 	 * Resize element
 	 */
 	var maybeChangeStateOnResize = function( manager ) {
-        // Reset collapsed state
+		// Reset collapsed state
 		_publicMethods.expand( manager.element );
 
 		requestAnimationFrame( function() {
@@ -189,7 +189,7 @@
 	 * Get slider manager instance from slider element
 	 */
 	_publicMethods.getInstance = function ( element ) {
-        var instance;
+		var instance;
 		for ( var i = 0; i < _publicMethods.managers.length; i++ ) {
 			var manager = _publicMethods.managers[i];
 			if ( manager.element == element ) { instance = manager; break; }
@@ -218,12 +218,12 @@
 	 * Collapse element
 	 */
 	_publicMethods.collapse = function( element ) {
-        var manager = _publicMethods.getInstance( element );
-        
-        // Bail if manager not found
+		var manager = _publicMethods.getInstance( element );
+		
+		// Bail if manager not found
 		if ( ! manager ) { return; }
 
-        // Collapse element
+		// Collapse element
 		manager.element.classList.add( manager.settings.isCollapsedClass );
 
 		// Remove `removeHeight` event listener to prevent block from expanding
@@ -239,18 +239,18 @@
 				manager.contentElement.style.height = manager.settings.maxHeight + 'px';
 			});
 		} )
-    }
+	}
 
 
 
-    /**
+	/**
 	 * Expand element
 	 */
 	_publicMethods.expand = function( element ) {
-        var manager = _publicMethods.getInstance( element );
+		var manager = _publicMethods.getInstance( element );
 
-        // Bail if manager not found
-        if ( ! manager ) { return; }
+		// Bail if manager not found
+		if ( ! manager ) { return; }
 
 		// Set event handler to remove height value when transition ends
 		manager.contentElement.addEventListener( getTransitionEvent(), removeHeight );
@@ -260,26 +260,26 @@
 			manager.element.classList.remove( manager.settings.isCollapsedClass );
 			manager.contentElement.style.height = manager.contentElement.scrollHeight + 'px';
 		} );
-    }
+	}
 
 
 
 	/**
 	 * Toggle collapsible state
 	 */
-    _publicMethods.toggleState = function( element ) {
-        var manager = _publicMethods.getInstance( element );
+	_publicMethods.toggleState = function( element ) {
+		var manager = _publicMethods.getInstance( element );
 
-        // Bail if manager not found
-        if ( ! manager ) { return; }
+		// Bail if manager not found
+		if ( ! manager ) { return; }
 
-        // Toggle state
-        if ( element.classList.contains( manager.settings.isCollapsedClass ) ) {
-            _publicMethods.expand( element );
-        }
-        else {
-            _publicMethods.collapse( element );
-        }
+		// Toggle state
+		if ( element.classList.contains( manager.settings.isCollapsedClass ) ) {
+			_publicMethods.expand( element );
+		}
+		else {
+			_publicMethods.collapse( element );
+		}
 	}
 	
 
@@ -287,11 +287,11 @@
 	/**
 	 * Get current collapsible block state
 	 */
-    _publicMethods.getState = function( element ) {
+	_publicMethods.getState = function( element ) {
 		var manager = _publicMethods.getInstance( element );
 
-        // Bail if manager not found
-        if ( ! manager ) { return false; }
+		// Bail if manager not found
+		if ( ! manager ) { return false; }
 		
 		// Get current state
 		var currentState = _publicMethods.states.EXPANDED;
@@ -308,7 +308,7 @@
 	 * Initialize an element
 	 */
 	_publicMethods.initializeElement = function( element ) {
-        var manager = {};
+		var manager = {};
 		_publicMethods.managers.push( manager );
 		manager.element = element;
 		manager.settings = extend( _settings );
@@ -318,25 +318,25 @@
 		if ( ! manager.contentElement ) {
 			manager.contentElement = manager.element;
 		}
-        
-        // Maybe create element ID
-        if ( manager.element.id == '' ) {
-            manager.element.id = manager.settings.idPrefix + '_' + _publicMethods.managers.length;
+		
+		// Maybe create element ID
+		if ( manager.element.id == '' ) {
+			manager.element.id = manager.settings.idPrefix + '_' + _publicMethods.managers.length;
 		}
 
 		// Maybe create contentElement ID
-        if ( manager.contentElement.id == '' ) {
-            manager.contentElement.id = manager.element.id + '__content';
+		if ( manager.contentElement.id == '' ) {
+			manager.contentElement.id = manager.element.id + '__content';
 		}
 
 		// Set overflow css property to hide content when the block is collapsed
 		manager.contentElement.style.overflow = 'hidden';
 
-        // Get maxHeight from attributes
+		// Get maxHeight from attributes
 		var maxHeightAttribute = manager.contentElement.getAttribute( manager.settings.maxHeightAttribute );
-        manager.settings.maxHeight = maxHeightAttribute && maxHeightAttribute != '' ? parseInt( maxHeightAttribute ) : manager.settings.maxHeight;
+		manager.settings.maxHeight = maxHeightAttribute && maxHeightAttribute != '' ? parseInt( maxHeightAttribute ) : manager.settings.maxHeight;
 
-        // Get createHandler from attributes
+		// Get createHandler from attributes
 		var createHandler = manager.element.getAttribute( manager.settings.createHandlerAttribute );
 		manager.settings.createHandler = createHandler == 'true' || createHandler == 'false' ? Boolean( createHandler ) : manager.settings.createHandler;
 		if ( manager.settings.createHandler ) {
@@ -387,10 +387,10 @@
 		
 		for ( var i = 0; i < elements.length; i++ ) {
 			_publicMethods.initializeElement( elements[ i ] );
-        }
-        
-        // Add event listeners
-        document.addEventListener( 'click', handleClick );
+		}
+		
+		// Add event listeners
+		document.addEventListener( 'click', handleClick );
 
 		_hasInitialized = true;
 	};
