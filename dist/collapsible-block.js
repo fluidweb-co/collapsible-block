@@ -222,16 +222,18 @@
 
 
 	/**
-	 * Remove the height property value from the `contentElement` when height transition ends.
+	 * Remove property values from the `contentElement` when height transition ends.
 	 */
-	var removeHeight = function ( e ) {
+	var removeProperties = function ( e ) {
 		if ( e.propertyName !== 'height' ) return;
 
-		// Remove element height when transition is complete
+		// Remove content element properties when transition is complete
 		e.target.style.height = '';
+		e.target.style.overflow = '';
 
 		// Remove the event handler so it runs only once
-		e.target.removeEventListener( getTransitionEvent(), removeHeight );
+		e.target.removeEventListener( getTransitionEvent(), removeProperties );
+		
 	}
 
 
@@ -247,9 +249,12 @@
 
 		// Collapse element
 		manager.element.classList.add( manager.settings.isCollapsedClass );
-
-		// Remove `removeHeight` event listener to prevent block from expanding
-		manager.contentElement.removeEventListener( getTransitionEvent(), removeHeight );
+		
+		// Remove `removeProperties` event listener to prevent block from expanding
+		manager.contentElement.removeEventListener( getTransitionEvent(), removeProperties );
+		
+		// Set content element to hide overflowing content
+		manager.contentElement.style.overflow = 'hidden';
 		
 		requestAnimationFrame( function() {
 			// Set height of the content element to it's current expanded height
@@ -275,7 +280,7 @@
 		if ( ! manager ) { return; }
 
 		// Set event handler to remove height value when transition ends
-		manager.contentElement.addEventListener( getTransitionEvent(), removeHeight );
+		manager.contentElement.addEventListener( getTransitionEvent(), removeProperties );
 
 		requestAnimationFrame( function() {
 			// Expand element to its content height
@@ -352,7 +357,7 @@
 		}
 
 		// Set overflow css property to hide content when the block is collapsed
-		manager.contentElement.style.overflow = 'hidden';
+		// manager.contentElement.style.overflow = 'hidden';
 
 		// Get maxHeight from attributes
 		var maxHeightAttribute = manager.contentElement.getAttribute( manager.settings.maxHeightAttribute );
