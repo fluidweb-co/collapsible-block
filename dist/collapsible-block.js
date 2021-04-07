@@ -356,9 +356,6 @@
 			manager.contentElement.id = manager.element.id + '__content';
 		}
 
-		// Set overflow css property to hide content when the block is collapsed
-		// manager.contentElement.style.overflow = 'hidden';
-
 		// Get maxHeight from attributes
 		var maxHeightAttribute = manager.contentElement.getAttribute( manager.settings.maxHeightAttribute );
 		manager.settings.maxHeight = maxHeightAttribute && maxHeightAttribute != '' ? parseInt( maxHeightAttribute ) : manager.settings.maxHeight;
