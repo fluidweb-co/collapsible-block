@@ -29,6 +29,7 @@
 	var _defaults = {
 		elementSelector: '[data-collapsible]',
 		contentElementSelector: '[data-collapsible-content]',
+		contentInnerSelector: '.collapsible-content__inner',
 		handlerSelector: '[data-collapsible-handler]',
 		
 		isCollapsedClass: 'is-collapsed',
@@ -47,6 +48,7 @@
 		createHandler: false,
 		maxHeight: 0,
 		handlerTemplate: '<a href="#collapsible" role="button" data-collapsible-handler>Read more</a>',
+		contentInnerTemplate: '<div class="collapsible-content__inner"></div>',
 	};
 
 
@@ -162,6 +164,26 @@
 		manager.handlerElement.setAttribute( 'role', 'button' );
 
 		element.insertBefore( handler.childNodes[0], contentElement.nextSibling );
+	}
+
+
+
+	/**
+	 * Create content inner element
+	 */
+	var maybeCreateContentInnerElement = function( manager ) {
+		// Bail if content inner element already exists
+		if ( manager.contentElement.querySelector( manager.settings.contentInnerSelector ) ) { return; }
+		
+		var element = manager.element;
+		var contentElement = manager.contentElement;
+		var newContentPlaceholder = document.createElement('div');
+		newContentPlaceholder.innerHTML = manager.settings.contentInnerTemplate.trim();
+		var contentInner = newContentPlaceholder.childNodes[0];
+
+		// Move content to new content inner element
+		contentInner.innerHTML = contentElement.innerHTML;
+		contentElement.innerHTML = newContentPlaceholder.innerHTML;
 	}
 	
 
@@ -342,6 +364,9 @@
 		if ( manager.settings.createHandler ) {
 			createHandlerElement( manager );
 		}
+
+		// Maybe create content inner element
+		maybeCreateContentInnerElement( manager );
 
 		// Set initial state at element initialization
 		var initialStateAttribute = manager.contentElement.getAttribute( manager.settings.initialStateAttribute );
