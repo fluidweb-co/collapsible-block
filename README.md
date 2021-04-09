@@ -45,24 +45,27 @@ These are the currently accepted options with their default values, if in doubt 
 	var _defaults = {
 		elementSelector: '[data-collapsible]',
 		contentElementSelector: '[data-collapsible-content]',
+		contentInnerSelector: '.collapsible-content__inner',
 		handlerSelector: '[data-collapsible-handler]',
-
+		
 		isCollapsedClass: 'is-collapsed',
 		isActivatedClass: 'is-activated',
-
+		cssTransition: 'height .15s linear',
+		
 		targetAttribute: 'data-collapsible-target',
 		maxHeightAttribute: 'data-collapsible-max-height',
 		createHandlerAttribute: 'data-collapsible-create-handler',
 		changeStateOnResizeAttribute: 'data-collapsible-change-state-resize',
 
-		initialState: CollapsibleBlock.states.FIRST_EXPANDED, // @see `CollapsibleBlock.states` for accepted values
+		initialState: _publicMethods.states.FIRST_EXPANDED,
 		initialStateAttribute: 'data-collapsible-initial-state',
-		cssTransition: 'height .15s linear',
-
+		firstExpandedDelay: 100,
+		
 		idPrefix: 'collapsible',
 		createHandler: false,
 		maxHeight: 0,
 		handlerTemplate: '<a href="#collapsible" role="button" data-collapsible-handler>Read more</a>',
+		contentInnerTemplate: '<div class="collapsible-content__inner"></div>',
 	};
 ```
 
