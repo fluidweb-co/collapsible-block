@@ -43,6 +43,7 @@
 
 		initialState: _publicMethods.states.FIRST_EXPANDED,
 		initialStateAttribute: 'data-collapsible-initial-state',
+		firstExpandedDelay: 100,
 		
 		idPrefix: 'collapsible',
 		createHandler: false,
@@ -375,10 +376,10 @@
 		var initialState = initialStateAttribute ? initialStateAttribute : manager.settings.initialState;
 		var index = Array.prototype.indexOf.call( manager.element.parentNode.children, manager.element );
 		if ( initialState == _publicMethods.states.EXPANDED || ( initialState == _publicMethods.states.FIRST_EXPANDED && index == 0 ) ) {
-			_publicMethods.expand( manager.element );
+			setTimeout( function() { _publicMethods.expand( manager.element ); }, manager.settings.firstExpandedDelay );
 		}
 		else {
-			_publicMethods.collapse( manager.element );
+			setTimeout( function() { _publicMethods.collapse( manager.element ); }, manager.settings.firstExpandedDelay );
 		}
 		
 		// Maybe change state on resize
