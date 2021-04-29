@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- Fix an error where the element or event passed to `finishCollapse` or `finishExpand` contains a `target` property but it is not valid.
+
 ## [1.1.0] - 2021-04-29
 
 ### Added
