@@ -43,6 +43,8 @@ These are the currently accepted options with their default values, if in doubt 
 
 ```js
 	var _defaults = {
+		bodyClass: 'has-collapsible-block',
+
 		elementSelector: '[data-collapsible]',
 		contentElementSelector: '[data-collapsible-content]',
 		contentInnerSelector: '.collapsible-content__inner',
@@ -52,7 +54,7 @@ These are the currently accepted options with their default values, if in doubt 
 		isActivatedClass: 'is-activated',
 		cssTransition: 'height .15s linear',
 		
-		targetAttribute: 'data-collapsible-target',
+		targetAttribute: 'aria-controls',
 		maxHeightAttribute: 'data-collapsible-max-height',
 		createHandlerAttribute: 'data-collapsible-create-handler',
 		changeStateOnResizeAttribute: 'data-collapsible-change-state-resize',
@@ -221,10 +223,10 @@ Starting as `expanded`;
 
 It is possible to control the state of a collapsible block even when it does not follow the recommented HTML structure.
 
-For that you'll need to know the ID of the collapsible content element and set the data attribute `data-collapsible-target="<KNOWN_COLLAPSIBLE_CONTENT_ID>"` replacing `<KNOWN_COLLAPSIBLE_CONTENT_ID>` with the actual ID of the content element. The handler element will have a markup similar to this:
+For that you'll need to know the ID of the collapsible content element and set the attribute `aria-controls="<KNOWN_COLLAPSIBLE_CONTENT_ID>"` replacing `<KNOWN_COLLAPSIBLE_CONTENT_ID>` with the actual ID of the content element. The handler element will have a markup similar to this:
 
 ```html
-<a href="#" data-collapsible-handler data-collapsible-target="collapsible-content-disconnected"></a>
+<a href="#" data-collapsible-handler aria-controls="collapsible-content-disconnected"></a>
 ```
 
 In this case, you'll also have to set the attribute `data-collapsible` to the collapsible block content element. The content element will have a markup similar to this:
@@ -237,7 +239,7 @@ Here is a full example:
 
 ```html
 <div class="disconnected-handler">
-	<a href="#" data-collapsible-handler data-collapsible-target="collapsible-content-disconnected">
+	<a href="#" data-collapsible-handler aria-controls="collapsible-content-disconnected">
 		Toggle State
 	</a>
 </div>

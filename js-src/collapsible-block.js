@@ -38,7 +38,7 @@
 		isActivatedClass: 'is-activated',
 		cssTransition: 'height .15s linear',
 		
-		targetAttribute: 'data-collapsible-target',
+		targetAttribute: 'aria-controls',
 		maxHeightAttribute: 'data-collapsible-max-height',
 		createHandlerAttribute: 'data-collapsible-create-handler',
 		changeStateOnResizeAttribute: 'data-collapsible-change-state-resize',
@@ -53,6 +53,10 @@
 		handlerTemplate: '<a href="#collapsible" role="button" data-collapsible-handler>Read more</a>',
 		contentInnerTemplate: '<div class="collapsible-content__inner"></div>',
 	};
+	var _key = {
+		ENTER: 'Enter',
+		SPACE: ' ',
+	}
 
 
 
@@ -132,6 +136,24 @@
 
 
 	/**
+	 * Trigger a reflow, flushing the CSS changes.
+	 * 
+	 * @param   HTMLElement  element  Element to get the computed height value.
+	 * 
+	 * @see https://gist.github.com/paulirish/5d52fb081b3570c81e3a
+	 */
+	var reflow = function( element ) {
+		// Set element as the body when not provided
+		if ( ! element ) {
+			element = document.body;
+		}
+
+		element.offsetHeight;
+	}
+
+
+
+	/**
 	 * Route click events
 	 */
 	var handleClick = function( e ) {
@@ -142,6 +164,7 @@
 			var handlerElement = e.target.closest( _settings.handlerSelector );
 			var targetElement = document.querySelector( '#' + handlerElement.getAttribute( _settings.targetAttribute ) );
 			
+			// Get target element from the handler element
 			if ( ! targetElement ) {
 				targetElement = handlerElement;
 			}
@@ -159,6 +182,22 @@
 
 
 	/**
+	 * Handle keypress event.
+	 */
+	var handleKeyDown = function( e ) {
+		// Should do nothing if the default action has been cancelled
+		if ( e.defaultPrevented ) { return; }
+
+		// ENTER on flyout trigger
+		if ( ( e.key == _key.ENTER || e.key == _key.SPACE ) && e.target.closest( _settings.handlerSelector ) ) {
+			// Similate click
+			handleClick( e );
+		}
+	};
+
+
+
+	/**
 	 * Create handler element
 	 */
 	var createHandlerElement = function( manager ) {
@@ -168,10 +207,9 @@
 		handler.innerHTML = manager.settings.handlerTemplate.trim();
 		manager.handlerElement = handler.childNodes[0];
 		manager.handlerElement.setAttribute( manager.settings.targetAttribute, contentElement.id );
-		
-		// TODO: Fix button role and behavior should be set with JS instead of using the `href` attribute
-		manager.handlerElement.setAttribute( 'href', '#' );
-		manager.handlerElement.setAttribute( 'role', 'button' );
+
+		// Initialize handler element attributes
+		_publicMethods.initializeHandler( manager.handlerElement );
 
 		element.insertBefore( handler.childNodes[0], contentElement.nextSibling );
 	}
@@ -271,7 +309,7 @@
 		// Restore element's transition
 		if ( ! withTransition ) {
 			// Trigger a reflow, flushing the CSS changes
-			element.offsetHeight;
+			reflow( element );
 			
 			// Set element styles back to original values
 			element.style.transition = originalTransition;
@@ -299,9 +337,27 @@
 
 
 	/**
+	 * Syncronize `aria-expanded` attribute for every handler of the collapsible-block on the page
+	 *
+	 * @param   mixed  HTMLElement  The content element of the collapsible block
+	 */
+	var syncAriaExpanded = function ( element, expanded ) {
+		// Bail if `element` or `expanded` are invalid
+		if ( ! element && typeof expanded !== 'boolean' ) { return; }
+
+		var handlers = document.querySelectorAll( '[' + _settings.targetAttribute + '=' + element.id + ']' );
+		for ( var i = 0; i < handlers.length; i++ ) {
+			var handler = handlers[ i ];
+			handler.setAttribute( 'aria-expanded', expanded );
+		}
+	}
+
+
+
+	/**
 	 * Remove changed property values from the target element when the `height` transition ends.
 	 *
-	 * @param   mixed  element  The content element of the collapsible block (HTMLElement), or an Event dispatched on that element.
+	 * @param   mixed  element  The content element of the collapsible block as a HTMLElement, or an Event dispatched on that element.
 	 */
 	var finishExpand = function ( element ) {
 		// Bail if element is invalid
@@ -318,6 +374,9 @@
 		// Remove content element properties when transition is complete
 		element.style.height = '';
 		element.style.overflow = '';
+
+		// Syncronize `aria-expanded` for every handler on the page
+		syncAriaExpanded( element, true );
 
 		// Remove the event handler so it runs only once
 		element.removeEventListener( getTransitionEndEvent(), finishExpand );
@@ -343,7 +402,9 @@
 
 		// Hide the element from the screen and from the accessibility tree
 		element.style.display = 'none';
-		element.style.backgroundColor = 'red';
+
+		// Syncronize `aria-expanded` for every handler on the page
+		syncAriaExpanded( element, false );
 
 		// Remove the event handler so it runs only once
 		element.removeEventListener( getTransitionEndEvent(), finishCollapse );
@@ -407,7 +468,7 @@
 		}
 
 		// Trigger a reflow, flushing the CSS changes
-		element.offsetHeight;
+		reflow( element );
 
 		// Set height of the element to the `collapsed` state
 		setHeight( manager.contentElement, manager.settings.maxHeight, withTransition );
@@ -456,7 +517,7 @@
 			var computedHeight = getComputedHeight( manager.contentElement );
 
 			// Trigger a reflow, flushing the CSS changes
-			element.offsetHeight;
+			reflow( element );
 
 			// Set height of the element to the `expanded` state
 			setHeight( manager.contentElement, computedHeight, withTransition );
@@ -518,6 +579,49 @@
 
 		return currentState;
 	}
+
+
+
+	/**
+	 * Initialize a handler element.
+	 */
+	_publicMethods.initializeHandler = function( handler ) {
+		// Enable the handler element
+		handler.removeAttribute( 'disabled' );
+		handler.removeAttribute( 'aria-hidden' );
+		
+		// Add the element to the natural tab order
+		handler.setAttribute( 'tabindex', '0' );
+
+		// Set handler role to `button`
+		if ( handler.tagName.toUpperCase() != 'BUTTON' ) {
+			handler.setAttribute( 'role', 'button' );
+		}
+
+		// Maybe get target element id from attributes or parent elements
+		var targetId = handler.getAttribute( _settings.targetAttribute );
+		if ( ! targetId || targetId == '' ) {
+			var parentCollapsible = handler.closest( _settings.elementSelector );
+
+			// Check if collapsbile blocks is also the content element
+			if ( parentCollapsible && parentCollapsible.matches( _settings.contentElementSelector ) ) {
+				targetId = parentCollapsible.id;
+			}
+			// Else, try to get content element from the collapsible block
+			else if ( parentCollapsible && parentCollapsible.querySelector( _settings.contentElementSelector ) ) {
+				var contentElement = parentCollapsible.querySelector( _settings.contentElementSelector );
+				targetId = contentElement.id;
+			}
+
+			// Maybe set target attribute
+			if ( targetId && targetId != '' ) {
+				handler.setAttribute( _settings.targetAttribute, targetId );
+			}
+		}
+		
+		// Remove the `href` attribute
+		handler.removeAttribute( 'href' );
+	}
 	
 
 
@@ -530,6 +634,7 @@
 		var manager = {};
 		_publicMethods.managers.push( manager );
 		manager.element = element;
+		// TODO: Refactor to remove `manager.settings` as it will always be a copy of the high-level `_settings` variable, with more properties that can be added directly to the `manager` variable.
 		manager.settings = extend( _settings );
 		
 		// Get content element
@@ -604,14 +709,31 @@
 		// Merge with general settings with options
 		_settings = extend( _defaults, options );
 
+		// Initialize collapsible elements
 		var elements = document.querySelectorAll( _settings.elementSelector );
-		
 		for ( var i = 0; i < elements.length; i++ ) {
 			_publicMethods.initializeElement( elements[ i ] );
+		}
+
+		// Initialize handler elements
+		var handlers = document.querySelectorAll( _settings.handlerSelector );
+		for ( var i = 0; i < handlers.length; i++ ) {
+			_publicMethods.initializeHandler( handlers[ i ] );
+		}
+
+		// Trigger a reflow, flushing the CSS changes
+		reflow();
+
+		// Syncronize `aria-expanded` for every handler on the page
+		for ( var i = 0; i < elements.length; i++ ) {
+			var element = elements[ i ];
+			var contentElement = element.matches( _settings.contentElementSelector ) ? element : element.querySelector( _settings.contentElementSelector );
+			syncAriaExpanded( contentElement, _publicMethods.getState( element ) == _publicMethods.states.EXPANDED );
 		}
 		
 		// Add event listeners
 		document.addEventListener( 'click', handleClick );
+		document.addEventListener( 'keydown', handleKeyDown, true );
 
 		// Set body class
 		document.body.classList.add( _settings.bodyClass );
