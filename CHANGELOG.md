@@ -6,13 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
-### Added
+### Changed
 
-- Added support for stopping the state transition and switch the transition direction from collapsing to expanding, and vice versa.
+- Improved `collapse` and `expand` functions to allow change the state of the block without transitions, and the initial state change will not "play" transitions.
+- Improved `collapse` and `expand` to stop any transition and switch from "collapsing" to "expanding", and vice versa.
 
 ### Fixed
 
-- Fixed how `collapse` and `expand` functions calculate the limit values for each state.
+- Fixed how `collapse` and `expand` functions calculate the limit values for each state, avoiding wrong values when the viewport or content site changes.
 
 ## [1.0.6] - 2021-04-27
 

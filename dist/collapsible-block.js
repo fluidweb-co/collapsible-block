@@ -244,13 +244,40 @@
 	var getCurrentHeight = function( element ) {
 		return element.getBoundingClientRect().height;
 	}
-	
+
+
+
+	var setHeight = function( element, size, withTransition ) {
+		// Set default value for withTransition
+		withTransition = withTransition === false ? false : true;
+		
+		// Remove element's transition
+		var originalTransition;
+		if ( ! withTransition ) {
+			originalTransition = element.style.transition;
+			element.style.transition = 'none';
+		}
+		
+		// Set the element's new height
+		element.style.height = size + 'px';
+		
+		// Restore element's transition
+		if ( ! withTransition ) {
+			// Trigger a reflow, flushing the CSS changes
+			element.offsetHeight;
+			
+			// Set element styles back to original values
+			element.style.transition = originalTransition;
+		}
+	}
+
 
 
 	/**
 	 * Resize element
 	 */
 	var maybeChangeStateOnResize = function( manager ) {
+		// TODO: REFACTOR THIS FUNCTION TO BE MORE EFFICIENT
 		// Reset collapsed state
 		_publicMethods.expand( manager.element );
 
@@ -276,7 +303,7 @@
 		e.target.style.overflow = '';
 
 		// Remove the event handler so it runs only once
-		e.target.removeEventListener( getTransitionEndEvent(), removeProperties );	
+		e.target.removeEventListener( getTransitionEndEvent(), removeProperties );
 	}
 
 
@@ -298,7 +325,7 @@
 	/**
 	 * Collapse element
 	 */
-	_publicMethods.collapse = function( element ) {
+	_publicMethods.collapse = function( element, withTransition ) {
 		var manager = _publicMethods.getInstance( element );
 		
 		// Bail if manager not found
@@ -312,19 +339,17 @@
 		
 		// Set content element to hide overflowing content
 		manager.contentElement.style.overflow = 'hidden';
-		
-		requestAnimationFrame( function() {
-			// Set height of the element to the current height value
-			// Without knowing the value of `height` property the browser can't calculate the steps of the `height` values
-			// related to the transition time and therefore won't be able to display the transition.
-			manager.contentElement.style.height = getCurrentHeight( manager.contentElement ) + 'px';
-			
-			// Wait for the new height to apply
-			requestAnimationFrame( function() {
-				// Set height of the element to the `collapsed` state
-				manager.contentElement.style.height = manager.settings.maxHeight + 'px';
-			});
-		} )
+
+		// Set height of the element to the current height value
+		// Without knowing the value of `height` property the browser can't calculate the steps of the `height` values
+		// related to the transition time and therefore won't be able to display the transition.
+		setHeight( manager.contentElement, getCurrentHeight( manager.contentElement ), false );
+
+		// Trigger a reflow, flushing the CSS changes
+		element.offsetHeight;
+
+		// Set height of the element to the `collapsed` state
+		setHeight( manager.contentElement, manager.settings.maxHeight, withTransition );;
 	}
 
 
@@ -332,7 +357,7 @@
 	/**
 	 * Expand element
 	 */
-	_publicMethods.expand = function( element ) {
+	_publicMethods.expand = function( element, withTransition ) {
 		// Get element manager
 		var manager = _publicMethods.getInstance( element );
 
@@ -341,7 +366,7 @@
 		if ( ! manager ) { return; }
 
 		// Set height of the element to the current height value
-		manager.contentElement.style.height = getCurrentHeight( manager.contentElement ) + 'px';
+		setHeight( manager.contentElement, getCurrentHeight( manager.contentElement ), false );
 
 		// Set event handler to remove height value when transition ends
 		manager.contentElement.addEventListener( getTransitionEndEvent(), removeProperties );
@@ -349,15 +374,15 @@
 		// Expand element to its content height
 		requestAnimationFrame( function() {
 			var computedHeight = getComputedHeight( manager.contentElement );
+
+			// Trigger a reflow, flushing the CSS changes
+			element.offsetHeight;
+
+			// Set height of the element to the `expanded` state
+			setHeight( manager.contentElement, computedHeight, withTransition );
 			
-			// Wait for the new styles to apply
-			requestAnimationFrame( function() {
-				// Set height of the element to the `expanded` state
-				manager.contentElement.style.height = computedHeight + 'px';
-				
-				// Update element's state to `expanded`
-				manager.element.classList.remove( manager.settings.isCollapsedClass );
-			});
+			// Update element's state to `expanded`
+			manager.element.classList.remove( manager.settings.isCollapsedClass );
 		} );
 	}
 
@@ -441,16 +466,16 @@
 
 		// Maybe create content inner element
 		maybeCreateContentInnerElement( manager );
-
+		
 		// Set initial state at element initialization
 		var initialStateAttribute = manager.contentElement.getAttribute( manager.settings.initialStateAttribute );
 		var initialState = initialStateAttribute ? initialStateAttribute : manager.settings.initialState;
 		var index = Array.prototype.indexOf.call( manager.element.parentNode.children, manager.element );
 		if ( initialState == _publicMethods.states.EXPANDED || ( initialState == _publicMethods.states.FIRST_EXPANDED && index == 0 ) ) {
-			setTimeout( function() { _publicMethods.expand( manager.element ); }, manager.settings.firstExpandedDelay );
+			_publicMethods.expand( manager.element, false );
 		}
 		else {
-			setTimeout( function() { _publicMethods.collapse( manager.element ); }, manager.settings.firstExpandedDelay );
+			_publicMethods.collapse( manager.element, false );
 		}
 		
 		// Maybe change state on resize
@@ -458,6 +483,8 @@
 		manager.settings.changeStateOnResize = changeStateOnResizeAttribute && changeStateOnResizeAttribute != '' ? Boolean( changeStateOnResizeAttribute ) : false;
 		if ( manager.settings.changeStateOnResize ) {
 			maybeChangeStateOnResize( manager );
+			
+			// TODO: Maybe move event handler to a single listener
 			window.addEventListener( 'resize', function() { maybeChangeStateOnResize( manager ); } );
 		}
 		
