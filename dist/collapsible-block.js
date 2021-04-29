@@ -352,7 +352,7 @@
 
 
 	/**
-	 * Remove changed property values from the target element when the `height` transition ends.
+	 * Finish the change to the "expanded" state.
 	 *
 	 * @param   mixed  element  The content element of the collapsible block as a HTMLElement, or an Event dispatched on that element.
 	 */
@@ -381,7 +381,7 @@
 
 
 	/**
-	 * Remove changed property values from the target element when the `height` transition ends.
+	 * Finish the change to the "collapsed" state.
 	 *
 	 * @param   mixed  element  The content element of the collapsible block as a HTMLElement, or an Event dispatched on that element.
 	 */
@@ -663,7 +663,7 @@
 
 		// Maybe create content inner element
 		maybeCreateContentInnerElement( manager );
-		
+
 		// Set initial state at element initialization
 		var initialStateAttribute = manager.contentElement.getAttribute( manager.settings.initialStateAttribute );
 		var initialState = initialStateAttribute ? initialStateAttribute : manager.settings.initialState;
