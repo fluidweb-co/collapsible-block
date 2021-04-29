@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Added support for keyboard keys `SPACE` and `ENTER` to activate the collapsible handlers.
+- Added accessibility `aria-` attributes to represent the state of the collapsible blocks.
+
+### Changed
+
+- Hides the content with `display: none;` when collapsing to prevent users from accessing collapsed content using the a keyboard.
+- Improved `collapse` and `expand` functions to allow change the state of the block without transitions, and the initial state change will not "play" transitions, and to stop any transition playing switching from "collapsing" to "expanding" and vice versa.
+
+### Fixed
+
+- Fixed how `collapse` and `expand` functions calculate the limit values for each state, avoiding wrong values when the viewport or content site changes.
+
+### Removed
+
+- Replaced the attribute `data-collapsible-target` with `aria-controls` as the later serves for accessibility purposes and can also be used to point to the target of the handler element.
+
 ## [1.0.6] - 2021-04-27
 
 ### Fixed
