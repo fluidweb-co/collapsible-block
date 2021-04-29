@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Changed
 
+- Hides the content with `display: none;` when collapsing to prevent users from accessing collapsed content using the a keyboard.
 - Improved `collapse` and `expand` functions to allow change the state of the block without transitions, and the initial state change will not "play" transitions.
 - Improved `collapse` and `expand` to stop any transition and switch from "collapsing" to "expanding", and vice versa.
 
