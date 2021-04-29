@@ -255,10 +255,8 @@
 		_publicMethods.expand( manager.element );
 
 		requestAnimationFrame( function() {
-			var elementRect = manager.element.getBoundingClientRect();
-
 			// Maybe collapse
-			if ( elementRect.height > manager.settings.maxHeight ) {
+			if ( getComputedHeight( manager.contentElement ) > manager.settings.maxHeight ) {
 				_publicMethods.collapse( manager.element );
 			}
 		} );
