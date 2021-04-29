@@ -364,7 +364,7 @@
 		if ( 'propertyName' in element && element.propertyName !== 'height' ) return;
 
 		// Get target element from property, usually passed in an event object
-		if ( 'target' in element ) {
+		if ( 'target' in element && element.target ) {
 			element = element.target;
 		}
 
@@ -393,7 +393,7 @@
 		if ( 'propertyName' in element && element.propertyName !== 'height' ) return;
 
 		// Get target element from property, usually passed in an event object
-		if ( 'target' in element ) {
+		if ( 'target' in element && element.target ) {
 			element = element.target;
 		}
 
