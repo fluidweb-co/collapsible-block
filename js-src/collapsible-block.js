@@ -208,9 +208,6 @@
 		manager.handlerElement = handler.childNodes[0];
 		manager.handlerElement.setAttribute( manager.settings.targetAttribute, contentElement.id );
 
-		// Initialize handler element attributes
-		_publicMethods.initializeHandler( manager.handlerElement );
-
 		element.insertBefore( handler.childNodes[0], contentElement.nextSibling );
 	}
 
