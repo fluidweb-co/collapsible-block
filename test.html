@@ -64,6 +64,22 @@
 			border: solid 2px #ddd;
 		}
 
+		#collapsible-content-multi-target-1 .collapsible-content__inner {
+			background-color: #a3f3f3;
+		}
+		#collapsible-content-multi-target-2 .collapsible-content__inner {
+			background-color: #f3a3f3;
+		}
+		#collapsible-content-multi-target-3 .collapsible-content__inner {
+			background-color: #f3f3a3;
+		}
+
+		#collapsible-handler-to-hide .collapsible-content__inner {
+			padding: 0;
+			background-color: #fff;
+			border: none;
+		}
+
 		.collapsible-content strong {
 			display: block;
 			margin-bottom: 10px;
@@ -156,20 +172,108 @@
 	<h2>Targetting a disconnected collapsible block content element</h2>
 	<div>The collapsible block below does not follow the recommended HTML structure but it is still possible to control it's state with a handler element that is not connected to the collapsible content section by the HTML structure. For that it is necessary that the `id` attribute of the content element is set manually (or at least known).</div>
 
-	<div class="collapsible-blocks__group">
-		<div class="disconnected-handler">
-			<a href="#" class="collapsible-block__handler" data-collapsible-handler aria-controls="collapsible-content-disconnected">
-				Toggle State
-			</a>
-		</div>
+	<div class="disconnected-handler">
+		<a href="#" class="collapsible-block__handler" data-collapsible-handler aria-controls="collapsible-content-disconnected">
+			Toggle State
+		</a>
+	</div>
 
-		<div id="collapsible-content-disconnected" class="collapsible-content" data-collapsible data-collapsible-content>
+	<div class="collapsible-blocks__group">
+		<div id="collapsible-content-disconnected" class="collapsible-content" data-collapsible data-collapsible-content data-collapsible-initial-state="collapsed">
 			<div class="collapsible-content__inner">
 				<strong>#collapsible-content-disconnected</strong><br>
 				Cupcake ipsum dolor sit amet brownie. Tootsie roll lollipop chocolate cake soufflé sweet roll gingerbread gummi bears dragée. Tootsie roll soufflé lemon drops. Cheesecake dragée jujubes cake jelly cookie caramels marzipan ice cream. Pastry jelly candy pastry halvah. Brownie tiramisu halvah. Pie gummi bears topping marzipan gummi bears jelly-o bonbon jelly-o jujubes. Croissant pudding liquorice lollipop jelly-o sweet chocolate cake caramels marzipan. Chocolate halvah marzipan wafer dessert toffee pastry croissant. Dragée ice cream lemon drops chocolate cake toffee fruitcake caramels sesame snaps carrot cake. Powder powder marzipan muffin cake danish pie. Lemon drops sesame snaps chocolate muffin apple pie fruitcake chocolate cake marzipan topping. Jelly beans brownie cake jelly beans tiramisu lemon drops chocolate carrot cake sugar plum.
 			</div>
 		</div>
 	</div>
+
+	<hr/>
+	
+	<h2>Toggle multiple targets</h2>
+	<div>The toggle button below will toggle the states (expand or collapsed) for each collapsible block set as a target.</div>
+
+	<a href="#" class="collapsible-block__handler" data-collapsible-handler data-collapsible-targets="collapsible-content-multi-target-1, collapsible-content-multi-target-2, collapsible-content-multi-target-3, non-existent-id">
+		Expand content and hide toggle button
+	</a>
+
+	<div class="collapsible-blocks__group">
+		<div id="collapsible-content-multi-target-1" class="collapsible-content" data-collapsible data-collapsible-content>
+			<div class="collapsible-content__inner">
+				<strong>#collapsible-content-multi-target-1</strong><br>
+				Sugar plum biscuit fruitcake. Dragée candy canes dragée carrot cake. Cake macaroon lemon drops soufflé carrot cake sesame snaps toffee candy. Cupcake gummi bears jujubes bear claw sweet roll. Sweet roll cheesecake cake cheesecake. Toffee jelly topping biscuit cupcake. Marshmallow lollipop wafer chupa chups. Brownie cookie carrot cake.
+			</div>
+		</div>
+
+		<div id="collapsible-content-multi-target-2" class="collapsible-content" data-collapsible data-collapsible-content>
+			<div class="collapsible-content__inner">
+				<strong>#collapsible-content-multi-target-2</strong><br>
+				Tiramisu halvah chocolate bar croissant cotton candy candy canes topping tootsie roll cupcake. Cake dessert jelly. Liquorice liquorice chocolate bar. Candy cotton candy carrot cake.
+
+				<p>
+					<label>
+						First focusable element:<br>
+						<input type="text" placeholder="This is the first focusable element" />
+					</label>
+				</p>
+
+				<p>
+					<label>
+						Second focusable element (autofocus):<br>
+						<input type="text" data-autofocus placeholder="This is the second focusable element" />
+					</label>
+				</p>
+
+				<p>
+					<button type="button">Do nothing</button>
+				</p>
+
+				Apple pie marzipan jujubes dragée. Jelly-o ice cream donut candy chupa chups tiramisu cake. Lemon drops sweet gingerbread sweet danish marzipan. Jelly beans jujubes candy lollipop toffee topping candy. Muffin cake oat cake.
+			</div>
+		</div>
+
+		<div id="collapsible-content-multi-target-3" class="collapsible-content" data-collapsible data-collapsible-content>
+			<div class="collapsible-content__inner">
+				<strong>#collapsible-content-multi-target-3</strong><br>
+				Jujubes pastry cotton candy. Biscuit liquorice wafer pastry pudding lemon drops fruitcake pie halvah. Gummies oat cake tiramisu biscuit. Lollipop dessert pie. Pie jelly oat cake chocolate bar. Gummies jelly jujubes topping toffee jelly toffee pudding. Jujubes donut caramels. Muffin topping tiramisu icing powder chocolate cake ice cream cotton candy.
+			</div>
+		</div>
+	</div>
+
+	<hr/>
+	
+	<h2>Multiple targets (one-way, hides toggle button)</h2>
+	<div>The toggle button below will expand the collapsed block with content and hide the collapsible block which contains the toggle link.</div>
+
+	<div class="collapsible-blocks__group">
+		<div id="collapsible-handler-to-hide" class="collapsible-content" data-collapsible data-collapsible-content data-collapsible-initial-state="expanded">
+			<div class="collapsible-content__inner">
+				<a href="#" class="collapsible-block__handler" data-collapsible-handler data-collapsible-targets="collapsible-handler-to-hide, collapsible-content-to-show">
+					Expand content and hide toggle button
+				</a>
+			</div>
+		</div>
+
+		<div id="collapsible-content-to-show" class="collapsible-content" data-collapsible data-collapsible-content data-collapsible-initial-state="collapsed" data-autofocus>
+			<div class="collapsible-content__inner">
+				Cupcake ipsum dolor sit amet brownie. Tootsie roll lollipop chocolate cake soufflé sweet roll gingerbread gummi bears dragée. Tootsie roll soufflé lemon drops. Cheesecake dragée jujubes cake jelly cookie caramels marzipan ice cream. Pastry jelly candy pastry halvah. Brownie tiramisu halvah. Pie gummi bears topping marzipan gummi bears jelly-o bonbon jelly-o jujubes. Croissant pudding liquorice lollipop jelly-o sweet chocolate cake caramels marzipan. Chocolate halvah marzipan wafer dessert toffee pastry croissant. Dragée ice cream lemon drops chocolate cake toffee fruitcake caramels sesame snaps carrot cake.
+
+				<p>
+					<label>
+						First focusable element:<br>
+						<input type="text" placeholder="This is the first focusable element" />
+					</label>
+				</p>
+
+				<p>
+					<button type="button">Do nothing</button>
+				</p>
+
+				Powder powder marzipan muffin cake danish pie. Lemon drops sesame snaps chocolate muffin apple pie fruitcake chocolate cake marzipan topping. Jelly beans brownie cake jelly beans tiramisu lemon drops chocolate carrot cake sugar plum.
+			</div>
+		</div>
+	</div>
+
+	<hr/>
 
 	<div class="debug-container">
 	</div>
