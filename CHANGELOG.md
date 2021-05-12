@@ -8,7 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 
-Added class `is-expanded` when blocks are expanded.
+- Added option to toggle state of multiple collapsible blocks at once by setting the attribute `data-collapsible-targets` with more than one collapsible block ID.
+- Added class `is-expanded` when blocks are expanded.
 
 ## [1.1.1] - 2021-04-29
 

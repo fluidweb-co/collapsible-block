@@ -33,6 +33,7 @@
 		contentElementSelector: '[data-collapsible-content]',
 		contentInnerSelector: '.collapsible-content__inner',
 		handlerSelector: '[data-collapsible-handler]',
+		handlerMultiTargetSelector: '[data-collapsible-targets]',
 		
 		isCollapsedClass: 'is-collapsed',
 		isExpandedClass: 'is-expanded',
@@ -40,6 +41,7 @@
 		cssTransition: 'height .15s linear',
 		
 		targetAttribute: 'aria-controls',
+		multiTargetAttribute: 'data-collapsible-targets',
 		maxHeightAttribute: 'data-collapsible-max-height',
 		createHandlerAttribute: 'data-collapsible-create-handler',
 		changeStateOnResizeAttribute: 'data-collapsible-change-state-resize',
@@ -154,28 +156,79 @@
 
 
 	/**
+	 * Handle toggle events for handlers with multiple targets.
+	 *
+	 * @param   HTMLElement  handlerElement  Handler element.
+	 */
+	var handleMultipleTargets = function( handlerElement ) {
+		// Bail if handler element is not valid
+		if ( ! handlerElement ) { return; }
+
+		// Get target ids
+		var multiTargetIds = handlerElement.getAttribute( _settings.multiTargetAttribute );
+		var targetIds = multiTargetIds.split( ',' );
+
+		// Iterate targetIds
+		for ( var i = 0; i < targetIds.length; i++) {
+			var targetId = targetIds[i];
+
+			// Get target element
+			var targetElement = document.querySelector( '#' + targetId.trim() );
+			if ( targetElement ) {
+				// Get the collapsbile element
+				var element = targetElement.closest( _settings.elementSelector );
+
+				// Maybe toggle collapsbile element state
+				if ( element ) {
+					_publicMethods.toggleState( element );
+				}
+			}
+		}
+	}
+
+
+
+	/**
+	 * Handle toggle events for handlers with single targets.
+	 *
+	 * @param   HTMLElement  handlerElement  Handler element.
+	 */
+	var handleSingleTarget = function( handlerElement ) {
+		// Bail if handler element is not valid
+		if ( ! handlerElement ) { return; }
+
+		// Get target element
+		var targetElement = document.querySelector( '#' + handlerElement.getAttribute( _settings.targetAttribute ) );
+		
+		// Get target element from the handler element
+		if ( ! targetElement ) {
+			targetElement = handlerElement;
+		}
+
+		// Get the collapsbile element
+		var element = targetElement.closest( _settings.elementSelector );
+
+		// Maybe toggle collapsbile element state
+		if ( element ) {
+			_publicMethods.toggleState( element );
+		}
+	}
+
+
+
+	/**
 	 * Route click events
 	 */
 	var handleClick = function( e ) {
-		if ( e.target.closest( _settings.handlerSelector ) ) {
+		if ( e.target.closest( _settings.handlerSelector ) && e.target.closest( _settings.handlerMultiTargetSelector ) ) {
 			e.preventDefault();
-			
-			// Get target and handler elements
+			var handlerElement = e.target.closest( _settings.handlerMultiTargetSelector );
+			handleMultipleTargets( handlerElement );
+		}
+		else if ( e.target.closest( _settings.handlerSelector ) ) {
+			e.preventDefault();
 			var handlerElement = e.target.closest( _settings.handlerSelector );
-			var targetElement = document.querySelector( '#' + handlerElement.getAttribute( _settings.targetAttribute ) );
-			
-			// Get target element from the handler element
-			if ( ! targetElement ) {
-				targetElement = handlerElement;
-			}
-
-			// Get the collapsbile element
-			var element = targetElement.closest( _settings.elementSelector );
-
-			// Maybe toggle collapsbile element state
-			if ( element ) {
-				_publicMethods.toggleState( element );
-			}
+			handleSingleTarget( handlerElement );
 		}
 	}
 
@@ -188,7 +241,7 @@
 		// Should do nothing if the default action has been cancelled
 		if ( e.defaultPrevented ) { return; }
 
-		// ENTER on flyout trigger
+		// ENTER or SPACE on handler element
 		if ( ( e.key == _key.ENTER || e.key == _key.SPACE ) && e.target.closest( _settings.handlerSelector ) ) {
 			// Similate click
 			handleClick( e );
@@ -597,9 +650,12 @@
 			handler.setAttribute( 'role', 'button' );
 		}
 
-		// Maybe get target element id from attributes or parent elements
+		// Get target attributes
 		var targetId = handler.getAttribute( _settings.targetAttribute );
-		if ( ! targetId || targetId == '' ) {
+		var multiTargetIds = handler.getAttribute( _settings.multiTargetAttribute );
+
+		// Maybe get target element id from attributes or parent elements
+		if ( ( ! targetId || targetId == '' ) && ( ! multiTargetIds || multiTargetIds == '' ) ) {
 			var parentCollapsible = handler.closest( _settings.elementSelector );
 
 			// Check if collapsbile blocks is also the content element
