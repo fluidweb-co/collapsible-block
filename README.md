@@ -49,19 +49,24 @@ These are the currently accepted options with their default values, if in doubt 
 		contentElementSelector: '[data-collapsible-content]',
 		contentInnerSelector: '.collapsible-content__inner',
 		handlerSelector: '[data-collapsible-handler]',
+		handlerMultiTargetSelector: '[data-collapsible-targets]',
+		
+		autoFocusSelector: '[data-autofocus]',
+		focusableElementsSelector: 'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), textarea:not([disabled]), select:not([disabled]), details, summary, iframe, object, embed, [contenteditable] [tabindex]:not([tabindex="-1"])',
 		
 		isCollapsedClass: 'is-collapsed',
+		isExpandedClass: 'is-expanded',
 		isActivatedClass: 'is-activated',
 		cssTransition: 'height .15s linear',
 		
 		targetAttribute: 'aria-controls',
+		multiTargetAttribute: 'data-collapsible-targets',
 		maxHeightAttribute: 'data-collapsible-max-height',
 		createHandlerAttribute: 'data-collapsible-create-handler',
 		changeStateOnResizeAttribute: 'data-collapsible-change-state-resize',
 
 		initialState: _publicMethods.states.FIRST_EXPANDED,
 		initialStateAttribute: 'data-collapsible-initial-state',
-		firstExpandedDelay: 100,
 		
 		idPrefix: 'collapsible',
 		createHandler: false,
