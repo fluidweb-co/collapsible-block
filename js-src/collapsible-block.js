@@ -35,6 +35,9 @@
 		handlerSelector: '[data-collapsible-handler]',
 		handlerMultiTargetSelector: '[data-collapsible-targets]',
 		
+		autoFocusSelector: '[data-autofocus]',
+		focusableElementsSelector: 'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), textarea:not([disabled]), select:not([disabled]), details, summary, iframe, object, embed, [contenteditable] [tabindex]:not([tabindex="-1"])',
+		
 		isCollapsedClass: 'is-collapsed',
 		isExpandedClass: 'is-expanded',
 		isActivatedClass: 'is-activated',
@@ -151,6 +154,23 @@
 		}
 
 		element.offsetHeight;
+	}
+
+
+
+	/**
+	 * Gets keyboard-focusable elements within a specified element
+	 *
+	 * @param   HTMLElement  element  The element to search within. Defaults to the `document` root element.
+	 *
+	 * @return  NodeList              All focusable elements withing the element passed in.
+	 */
+	 var getFocusableElements = function( element ) {
+		// Set element to `document` root if not passed in
+		if ( ! element ) { element = document; }
+		
+		// Get elements that are keyboard-focusable, but might be `disabled`
+		return element.querySelectorAll( _settings.focusableElementsSelector );
 	}
 
 
@@ -427,6 +447,19 @@
 
 		// Syncronize `aria-expanded` for every handler on the page
 		syncAriaExpanded( element, true );
+				
+		// Maybe set focus to child element marked as auto-focus
+		var autofocusChild = element.querySelector( _settings.autoFocusSelector );
+		if ( autofocusChild ) {
+			autofocusChild.focus();
+		}
+		// Maybe set focus to first focusable element
+		else if ( element.matches( _settings.autoFocusSelector ) ) {
+			var focusableElements = Array.from( getFocusableElements( element ) );
+			if ( focusableElements.length > 0 ) {
+				focusableElements[0].focus();
+			}
+		}
 
 		// Remove the event handler so it runs only once
 		element.removeEventListener( getTransitionEndEvent(), finishExpand );

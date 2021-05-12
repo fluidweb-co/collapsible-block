@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 
+- Added option to set focus to first focusable element within the collapsible block content element. Set the attribute `data-autofocus` on the collapsible block element or the element that should get the focus.
 - Added option to toggle state of multiple collapsible blocks at once by setting the attribute `data-collapsible-targets` with more than one collapsible block ID.
 - Added class `is-expanded` when blocks are expanded.
 
