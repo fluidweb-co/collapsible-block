@@ -35,6 +35,7 @@
 		handlerSelector: '[data-collapsible-handler]',
 		
 		isCollapsedClass: 'is-collapsed',
+		isExpandedClass: 'is-expanded',
 		isActivatedClass: 'is-activated',
 		cssTransition: 'height .15s linear',
 		
@@ -45,7 +46,6 @@
 
 		initialState: _publicMethods.states.FIRST_EXPANDED,
 		initialStateAttribute: 'data-collapsible-initial-state',
-		firstExpandedDelay: 100,
 		
 		idPrefix: 'collapsible',
 		createHandler: false,
@@ -445,8 +445,9 @@
 		// Set default value for withTransition
 		withTransition = withTransition === false ? false : true;
 
-		// Collapse element
+		// Update element's state to `collapsed`
 		manager.element.classList.add( manager.settings.isCollapsedClass );
+		manager.element.classList.remove( manager.settings.isExpandedClass );
 		
 		// Remove `finishExpand` event listener to prevent block from expanding at the end of the transition
 		manager.contentElement.removeEventListener( getTransitionEndEvent(), finishExpand );
@@ -520,6 +521,7 @@
 			setHeight( manager.contentElement, computedHeight, withTransition );
 
 			// Update element's state to `expanded`
+			manager.element.classList.add( manager.settings.isExpandedClass );
 			manager.element.classList.remove( manager.settings.isCollapsedClass );
 			
 			// Make sure to finish the "expand" state change when transitions are not used
