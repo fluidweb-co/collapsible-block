@@ -50,15 +50,16 @@ These are the currently accepted options with their default values, if in doubt 
 		contentInnerSelector: '.collapsible-content__inner',
 		handlerSelector: '[data-collapsible-handler]',
 		handlerMultiTargetSelector: '[data-collapsible-targets]',
-		
+
 		autoFocusSelector: '[data-autofocus]',
 		focusableElementsSelector: 'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), textarea:not([disabled]), select:not([disabled]), details, summary, iframe, object, embed, [contenteditable] [tabindex]:not([tabindex="-1"])',
-		
+		selectOnFocus: true,
+
 		isCollapsedClass: 'is-collapsed',
 		isExpandedClass: 'is-expanded',
 		isActivatedClass: 'is-activated',
 		cssTransition: 'height .15s linear',
-		
+
 		targetAttribute: 'aria-controls',
 		multiTargetAttribute: 'data-collapsible-targets',
 		maxHeightAttribute: 'data-collapsible-max-height',
@@ -67,7 +68,7 @@ These are the currently accepted options with their default values, if in doubt 
 
 		initialState: _publicMethods.states.FIRST_EXPANDED,
 		initialStateAttribute: 'data-collapsible-initial-state',
-		
+
 		idPrefix: 'collapsible',
 		createHandler: false,
 		maxHeight: 0,
@@ -219,7 +220,7 @@ Starting as `expanded`;
 			</div>
 		</div>
 	</div>
-	
+
 </div>
 ```
 
