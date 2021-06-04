@@ -53,7 +53,7 @@ These are the currently accepted options with their default values, if in doubt 
 
 		autoFocusSelector: '[data-autofocus]',
 		focusableElementsSelector: 'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), textarea:not([disabled]), select:not([disabled]), details, summary, iframe, object, embed, [contenteditable] [tabindex]:not([tabindex="-1"])',
-		selectOnFocus: true,
+		selectContentsOnFocus: true,
 
 		isCollapsedClass: 'is-collapsed',
 		isExpandedClass: 'is-expanded',
