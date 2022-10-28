@@ -451,14 +451,14 @@
 			element = element.target;
 		}
 
-		
+
 		// Remove content element properties when transition is complete
 		element.style.height = '';
 		element.style.overflow = '';
-		
+
 		// Syncronize `aria-expanded` for every handler on the page
 		syncAriaExpanded( element, true );
-		
+
 		// Maybe set focus state
 		var manager = _publicMethods.getInstance( element.closest( _settings.elementSelector ) );
 		if ( manager && manager.isActivated === true && manager.withFocus ) {
@@ -657,7 +657,7 @@
 
 			// Make sure to finish the "expand" state change when transitions are not used
 			if ( ! withTransition ) {
-				// finishExpand( manager.contentElement );
+				finishExpand( manager.contentElement );
 			}
 		} );
 	}
