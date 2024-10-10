@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.10] - 2024-10-10
+
+- Added: New methods `CollapsibleBlock.enableFocusOnExpand` and `CollapsibleBlock.disableFocusOnExpand` to control whether to focus on the first focusable element when expanding a block.
+
 ## [1.1.9] - 2024-06-28
 
 - Fixed: Make sure to finish the "expand" state change after the duration of the height transition, so we don't need to rely completely on the browser's `transitionend` event.
