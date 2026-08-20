@@ -309,9 +309,16 @@
 		newContentPlaceholder.innerHTML = manager.settings.contentInnerTemplate.trim();
 		var contentInner = newContentPlaceholder.childNodes[0];
 
-		// Move content to new content inner element
-		contentInner.innerHTML = contentElement.innerHTML;
-		contentElement.innerHTML = newContentPlaceholder.innerHTML;
+		// Get nodes from the content element
+		var contentNodes = Array.from( contentElement.childNodes );
+
+		// Move content nodes to the new content inner element
+		for ( var i = 0; i < contentNodes.length; i++ ) {
+			contentInner.appendChild( contentNodes[ i ] );
+		}
+
+		// Append the new content inner element
+		contentElement.appendChild( contentInner );
 	}
 
 
